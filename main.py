@@ -5,11 +5,15 @@ def sudetis(x,y):
 def atimtis(x,y):
     return x - y
 
-def daugyba(x,y)
+def daugyba(x,y):
     return x * y
 
-def dalyba(x,y)
-    return x / y
+def dalyba(x,y):
+    if y == 0:
+        print("Dalyba is nulio negalima!")
+        return
+    else:
+        return x / y
 
 #meniu:
 print("Pasirinkite operacija:")
@@ -19,7 +23,7 @@ print("3. Daugyba")
 print("4. Dalyba")
 
 #meniu pasirinkimas:
-while true:
+while True:
     pasirinkimas = input("Iveskite pasirinkima (1/2/3/4): ")
 
     if pasirinkimas in ('1', '2', '3', '4'):
@@ -32,16 +36,17 @@ while true:
 
         #pasirinktų operacijų įgyvendinimas: 
         if pasirinkimas == '1':
-            print(num1, "+", num2, "=" sudetis(num1, num2))
+            print(num1, "+", num2, "=", sudetis(num1, num2))
 
         elif pasirinkimas == '2':
-            print(num1, "-", num2, "=" atimtis(num1, num2))
+            print(num1, "-", num2, "=", atimtis(num1, num2))
 
         elif pasirinkimas == '3':
-            print(num1, "*", num2, "=" daugyba(num1, num2))
+            print(num1, "*", num2, "=", daugyba(num1, num2))
 
         elif pasirinkimas == '4':
-            print(num1, "/", num2, "=" dalyba(num1, num2))
+            print(num1, "/", num2, "=", dalyba(num1, num2))
+
 
         kitas_skaiciavimas = input("Ar norite atlikti dar viena operacija? (taip/ne): ")
         if kitas_skaiciavimas == "no":

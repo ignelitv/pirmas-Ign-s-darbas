@@ -30,7 +30,7 @@ while true:
             print("Neteisinga ivestis. Pasirinkite dar karta.")
             continue
 
-        #operacijos: 
+        #pasirinktu operaciju igyvendinimas: 
         if pasirinkimas == '1':
             print(num1, "+", num2, "=" sudetis(num1, num2))
 

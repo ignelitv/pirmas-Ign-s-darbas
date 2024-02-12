@@ -30,3 +30,18 @@ while true:
 
         if pasirinkimas == '1':
             print(num1, "+", num2, "=" sudetis(num1, num2))
+
+        elif pasirinkimas == '2':
+            print(num1, "-", num2, "=" atimtis(num1, num2))
+
+        elif pasirinkimas == '3':
+            print(num1, "*", num2, "=" daugyba(num1, num2))
+
+        elif pasirinkimas == '4':
+            print(num1, "/", num2, "=" dalyba(num1, num2))
+
+        kitas_skaiciavimas = input("Ar norite atlikti dar viena operacija? (taip/ne): ")
+        if kitas_skaiciavimas == "no":
+            break
+    else:
+        print("netinkama ivestis")

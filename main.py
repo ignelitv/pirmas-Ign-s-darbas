@@ -15,41 +15,35 @@ def dalyba(x,y):
     else:
         return x / y
 
-#meniu:
-print("Pasirinkite operacija:")
-print("1. Sudetis")
-print("2. Atimtis")
-print("3. Daugyba")
-print("4. Dalyba")
 
 #meniu pasirinkimas:
 while True:
-    pasirinkimas = input("Iveskite pasirinkima (1/2/3/4): ")
+    try:
+         skaiciai_ir_operacija = input("Iveskite skaicius ir operacija (pvz.: 5+7): ")
+         skaiciai_ir_operacija = skaiciai_ir_operacija.split()
 
-    if pasirinkimas in ('1', '2', '3', '4'):
-        try:
-            num1 = float(input("iveskite pirmaji skaiciu: "))
-            num2 = float(input("iveskite antraji skaiciu: "))
-        except valueerror:
-            print("Neteisinga ivestis. Pasirinkite dar karta.")
-            continue
+         num1 = float(skaiciai_ir_operacija[0])
+         operacija = skaiciai_ir_operacija[1]
+         num2 = float(skaiciai_ir_operacija[2])
+
+    except ValueError:
+         print("Neteisinga ivestis. Pasirinkite dar karta.")
+         continue
 
         #pasirinktų operacijų įgyvendinimas: 
-        if pasirinkimas == '1':
-            print(num1, "+", num2, "=", sudetis(num1, num2))
+    if operacija == '+':
+        print(num1, "+", num2, "=", sudetis(num1, num2))
 
-        elif pasirinkimas == '2':
-            print(num1, "-", num2, "=", atimtis(num1, num2))
+    elif operacija == '-':
+        print(num1, "-", num2, "=", atimtis(num1, num2))
 
-        elif pasirinkimas == '3':
-            print(num1, "*", num2, "=", daugyba(num1, num2))
+    elif operacija == '*':
+        print(num1, "*", num2, "=", daugyba(num1, num2))
 
-        elif pasirinkimas == '4':
-            print(num1, "/", num2, "=", dalyba(num1, num2))
+    elif operacija == '/':
+        print(num1, "/", num2, "=", dalyba(num1, num2))
 
 
         kitas_skaiciavimas = input("Ar norite atlikti dar viena operacija? (taip/ne): ")
-        if kitas_skaiciavimas == "no":
+        if kitas_skaiciavimas == "ne":
             break
-    else:
-        print("netinkama ivestis")

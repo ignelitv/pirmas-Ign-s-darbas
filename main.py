@@ -18,17 +18,20 @@ def dalyba(x,y):
 
 #meniu pasirinkimas:
 while True:
-    try:
-         skaiciai_ir_operacija = input("Iveskite skaicius ir operacija (pvz.: 5+7): ")
-         skaiciai_ir_operacija = skaiciai_ir_operacija.split()
 
-         num1 = float(skaiciai_ir_operacija[0])
-         operacija = skaiciai_ir_operacija[1]
-         num2 = float(skaiciai_ir_operacija[2])
+    skaiciai_ir_operacija = input("Iveskite skaicius ir operacija (pvz.: 5+7): ")
+    if len(skaiciai_ir_operacija) != 3:
+        raise ValueError ("Neteisingas formatas!")
+    
+    [num1, num2] = skaiciai_ir_operacija.split("+")
 
-    except ValueError:
-         print("Neteisinga ivestis. Pasirinkite dar karta.")
-         continue
+    num1 = float(num1)
+    num2 = float(num2)
+
+
+    
+    if operacija not in ['+', '-', '*', '/']:
+        print("netinkamas operacijos zenklas.")
 
         #pasirinktų operacijų įgyvendinimas: 
     if operacija == '+':

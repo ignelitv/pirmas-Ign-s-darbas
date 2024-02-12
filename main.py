@@ -11,12 +11,14 @@ def daugyba(x,y)
 def dalyba(x,y)
     return x / y
 
+#meniu:
 print("Pasirinkite operacija:")
 print("1. Sudetis")
 print("2. Atimtis")
 print("3. Daugyba")
 print("4. Dalyba")
 
+#meniu pasirinkimas:
 while true:
     pasirinkimas = input("Iveskite pasirinkima (1/2/3/4): ")
 
@@ -28,6 +30,7 @@ while true:
             print("Neteisinga ivestis. Pasirinkite dar karta.")
             continue
 
+        #operacijos: 
         if pasirinkimas == '1':
             print(num1, "+", num2, "=" sudetis(num1, num2))
 

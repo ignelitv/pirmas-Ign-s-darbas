@@ -1,4 +1,7 @@
 
+import Flask
+
+
 def sudetis(x,y):
     return x + y
 
@@ -20,16 +23,16 @@ def dalyba(x,y):
 while True:
 
     skaiciai_ir_operacija = input("Iveskite skaicius ir operacija (pvz.: 5+7): ")
-    if len(skaiciai_ir_operacija) != 3:
-        raise ValueError ("Neteisingas formatas!")
+
+    if len(skaiciai_ir_operacija) != 3 or skaiciai_ir_operacija[1] not in ['+', '-','*', '/']:
+        print ("Neteisingas formatas!")
     
-    [num1, num2] = skaiciai_ir_operacija.split("+")
+    num1, operacija, num2 = skaiciai_ir_operacija
 
     num1 = float(num1)
     num2 = float(num2)
 
 
-    
     if operacija not in ['+', '-', '*', '/']:
         print("netinkamas operacijos zenklas.")
 

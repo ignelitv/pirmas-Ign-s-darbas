@@ -43,7 +43,7 @@ def hello_world():
 def skaiciuoti():
     expression = request.form['expression']
     try:
-        num1, operacija, num2 = expression.split()
+        num1, operacija, num2 = expression.split() #išskaidoma išraiška į tris elementus atskiriant juos pagal tarpus
         num1 = float(num1)
         num2 = float(num2)
 
@@ -61,13 +61,13 @@ def skaiciuoti():
         elif operacija == '/':
             result = dalyba(num1, num2)
 
-        return f"Rezultatas: {result}"
+        return f"Rezultatas: {result}" #Jeigu išraiška įvesta teisingai, išspausdinamas gautas rezultatas
     except Exception as e:
-        return f"Įvyko klaida įvertinant išraiską: {e}"
+        return f"Įvyko klaida įvertinant išraiską: {e}" #Jeigu programa išraiškos nesupranta, išspausdinama žinutė, kad nepavyko gauti rezultato
 
 
 if __name__ == '__main__':
-    app.run() 
+    app.run() #Programos paleidimas
 
 
 

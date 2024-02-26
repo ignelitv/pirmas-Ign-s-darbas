@@ -1,7 +1,12 @@
 
-from flask import Flask, request
+from flask import Flask, request, session
+
 
 app = Flask(__name__)
+app.secret_key = 'veiksmu_istorija'
+app.config['SESSION_TYPE'] = 'filesystem'
+
+Session(app)
 
 def sudetis(x,y):
     return x + y
@@ -34,6 +39,8 @@ def hello_world():
                         <input type="text" id="expression" name="expression">
                         <button type="submit">Skaičiuoti</button>
                     </form>
+                <div id="istorija">
+                </div>
                 </body>
                 </html>
             """
@@ -47,8 +54,6 @@ def skaiciuoti():
         num1 = float(num1)
         num2 = float(num2)
 
-
-    
         if operacija == '+':
             result = sudetis(num1, num2)
 
@@ -61,7 +66,14 @@ def skaiciuoti():
         elif operacija == '/':
             result = dalyba(num1, num2)
 
-        return f"Rezultatas: {result}" #Jeigu išraiška įvesta teisingai, išspausdinamas gautas rezultatas
+        action = f"{expression} = {result}"
+        
+        if 'istorija' not in session:
+            session['istorija'] = []
+
+        session ['istorija'].append(action)
+
+        return f"Rezultatas: {result}<br>Veiksmų istorija: {', '.join(session['istorija'])}" #Jeigu išraiška įvesta teisingai, išspausdinamas gautas rezultatas
     except Exception as e:
         return f"Įvyko klaida įvertinant išraiską: {e}" #Jeigu programa išraiškos nesupranta, išspausdinama žinutė, kad nepavyko gauti rezultato
 

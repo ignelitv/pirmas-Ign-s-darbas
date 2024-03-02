@@ -1,12 +1,9 @@
 
-from flask import Flask, request, session
-
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
-app.secret_key = 'veiksmu_istorija'
-app.config['SESSION_TYPE'] = 'filesystem'
 
-Session(app)
+history = []
 
 def sudetis(x,y):
     return x + y
@@ -25,6 +22,10 @@ def dalyba(x,y):
 
 @app.route("/")
 def hello_world():
+    history_items = ""
+    for item in history:
+        history_items += f"<li>{item}</li>"
+
     return f"""
                 <!DOCTYPE html>
                 <html lang="lt">
@@ -39,8 +40,19 @@ def hello_world():
                         <input type="text" id="expression" name="expression">
                         <button type="submit">Skaičiuoti</button>
                     </form>
-                <div id="istorija">
-                </div>
+                    
+                    <h2>Veiksmų istorija:</h2>
+                    <u1>
+                        {history_items}
+                    </u1>
+
+                    {% if result %}
+                        <p>Rezultatas: {{ result }}</p>
+                    {% endif %}
+
+                    {% if error %}
+                        <p>Klaida: {{ error }}</p>
+                    {% endif %}
                 </body>
                 </html>
             """
@@ -54,6 +66,8 @@ def skaiciuoti():
         num1 = float(num1)
         num2 = float(num2)
 
+
+    
         if operacija == '+':
             result = sudetis(num1, num2)
 
@@ -66,17 +80,10 @@ def skaiciuoti():
         elif operacija == '/':
             result = dalyba(num1, num2)
 
-        action = f"{expression} = {result}"
-        
-        if 'istorija' not in session:
-            session['istorija'] = []
-
-        session ['istorija'].append(action)
-
-        return f"Rezultatas: {result}<br>Veiksmų istorija: {', '.join(session['istorija'])}" #Jeigu išraiška įvesta teisingai, išspausdinamas gautas rezultatas
+        return f"Rezultatas: {result}" #Jeigu išraiška įvesta teisingai, išspausdinamas gautas rezultatas
     except Exception as e:
-        return f"Įvyko klaida įvertinant išraiską: {e}" #Jeigu programa išraiškos nesupranta, išspausdinama žinutė, kad nepavyko gauti rezultato
-
+        error = f"Įvyko klaida įvertinant išraiską: {e}" #Jeigu programa išraiškos nesupranta, išspausdinama žinutė, kad nepavyko gauti rezultato
+        return f"Klaida: {error}"
 
 if __name__ == '__main__':
     app.run() #Programos paleidimas

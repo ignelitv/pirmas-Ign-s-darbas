@@ -1,5 +1,4 @@
-
-from flask import Flask, render_template, request
+from flask import Flask, request
 
 app = Flask(__name__)
 
@@ -22,9 +21,7 @@ def dalyba(x,y):
 
 @app.route("/")
 def hello_world():
-    history_items = ""
-    for item in history:
-        history_items += f"<li>{item}</li>"
+    history_items = "".join([f"<li>{item}</li>" for item in history])
 
     return f"""
                 <!DOCTYPE html>
@@ -43,20 +40,21 @@ def hello_world():
                     
                     <h2>Veiksmų istorija:</h2>
                     <u1>
-                        {history_items}
+                        { history_items }
                     </u1>
 
-                    {% if result %}
-                        <p>Rezultatas: {{ result }}</p>
-                    {% endif %}
+                    """
+    if 'result' in locals():
+        html += f"<p>Rezultatas: {result}</p>"
 
-                    {% if error %}
-                        <p>Klaida: {{ error }}</p>
-                    {% endif %}
-                </body>
-                </html>
+    if 'error' in locals():
+        html += f"<p>Klaida: {error}</p>"
+
+    html += """
+
+            </body>
+            </html>
             """
-
 
 @app.route("/skaiciuotuvas", methods =['POST'])
 def skaiciuoti():

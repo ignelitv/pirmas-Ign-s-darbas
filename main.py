@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
@@ -21,9 +21,10 @@ def dalyba(x,y):
 
 @app.route("/")
 def hello_world():
+    
     history_items = "".join([f"<li>{item}</li>" for item in history])
 
-    return f"""
+    template = """
                 <!DOCTYPE html>
                 <html lang="lt">
                 <head>
@@ -39,22 +40,15 @@ def hello_world():
                     </form>
                     
                     <h2>Veiksmų istorija:</h2>
-                    <u1>
-                        { history_items }
-                    </u1>
-
-                    """
-    if 'result' in locals():
-        html += f"<p>Rezultatas: {result}</p>"
-
-    if 'error' in locals():
-        html += f"<p>Klaida: {error}</p>"
-
-    html += """
-
-            </body>
-            </html>
+                    <ul>
+                        {% for item in history_items %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </body>
+                </html>
             """
+    return render_template_string(template, history=history)
 
 @app.route("/skaiciuotuvas", methods =['POST'])
 def skaiciuoti():
@@ -64,19 +58,21 @@ def skaiciuoti():
         num1 = float(num1)
         num2 = float(num2)
 
-
     
         if operacija == '+':
             result = sudetis(num1, num2)
 
         elif operacija == '-':
-            result = atimtis(num1, num2)
+            result = atimtis (num1, num2)
 
         elif operacija == '*':
-            result = daugyba(num1, num2)
+            result = daugyba (num1, num2)
 
         elif operacija == '/':
-            result = dalyba(num1, num2)
+            result = dalyba (num1, num2)
+
+        history.append(f"{num1} {operacija} {num2} = {result}")
+        print(history)
 
         return f"Rezultatas: {result}" #Jeigu išraiška įvesta teisingai, išspausdinamas gautas rezultatas
     except Exception as e:

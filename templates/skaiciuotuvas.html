@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skaiciuotuvas</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #3494E6, #EC6EAD);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .result {
+            margin-top: 30px;
+            border-top: 2px solid #fff;
+            padding-top: 20px;
+        }
+        .result p {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: transparent;
+            border-color: transparent;
+            color: #fff;
+            padding: 8px 12px;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 2px solid #fff;
+        }
+        .btn-primary:hover {
+            background-color: rgba(0,0,0,0.1);
+            border-color: rgba(0,0,0,0.1);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Skaičiuotuvas</h2>
+        <form method="post" action="/skaiciuoti">
+            <div class="form-group">
+                <input type="number" class="form-control form-control-lg" name="num1" id="num1" placeholder="Pirmas skaičius" required>
+            </div>
+            <div class="form-group" id="num2Field">
+                <input type="number" class="form-control form-control-lg" name="num2" id="num2" placeholder="Antras skaičius" required>
+            </div>
+            <div class="form-group">
+                <select class="form-control form-control-lg" name="operatorius" id="operatorius" required>
+                    <option value="sudėti" selected>Sudėti (+)</option>
+                    <option value="atimti">Atimti (-)</option>
+                    <option value="dauginti">Dauginti (*)</option>
+                    <option value="dalinti">Dalyti (/)</option>
+                    <option value="kvadratinė_šaknis">Kvadratinė šaknis (√)</option>
+                    <option value="kvadratu">Kelti kvadratu (x^2)</option>
+                    <option value="faktorialas">Faktorialas (x!)</option>
+                    <option value="sinusas">Sinusas (sin(x))</option>
+                    <option value="kosinusas">Kosinusas (cos(x))</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Skaičiuoti</button>
+        </form>
+        <div class="result">
+            {% if rezultatas is not none %}
+            <h4 class="text-center mb-3">Rezultatas:</h4>
+            <p class="text-center">
+                {% if operatorius in ['sudėti', 'atimti', 'dauginti', 'dalinti'] %}
+                    {{ num1 }} {% if operatorius == 'sudėti' %}+{% elif operatorius == 'atimti' %}-{% elif operatorius == 'dauginti' %}*{% elif operatorius == 'dalinti' %}/{% endif %} {{ num2 }} = {{ rezultatas }}
+                {% elif operatorius == 'kvadratinė_šaknis' %}
+                    √{{ num1 }} = {{ rezultatas }}
+                {% elif operatorius == 'kvadratu' %}
+                    {{ num1 }}^2 = {{ rezultatas }}
+                {% elif operatorius == 'faktorialas' %}
+                    {{ num1 }}! = {{ rezultatas }}
+                {% elif operatorius == 'sinusas' %}
+                    sin({{ num1 }}) = {{ rezultatas }}
+                {% elif operatorius == 'kosinusas' %}
+                    cos({{ num1 }}) = {{ rezultatas }}
+                {% endif %}
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('operatorius').addEventListener('change', function() {
+            var operator = this.value;
+            if (operator === 'sudėti' || operator === 'atimti' || operator === 'dauginti' || operator === 'dalinti') {
+                document.getElementById('num2Field').style.display = 'block';
+                document.getElementById('num2').setAttribute('required', true);
+            } else {
+                document.getElementById('num2Field').style.display = 'none';
+                document.getElementById('num2').removeAttribute('required');
+            }
+        });
+    </script>
+</body>
+</html>

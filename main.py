@@ -1,141 +1,67 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, render_template, request, redirect, url_for
+import math
 
 app = Flask(__name__)
 
-history = []
-
-def sudetis(x,y):
-    return x + y
-
-def atimtis(x,y):
-    return x - y
-
-def daugyba(x,y):
-    return x * y
-
-def dalyba(x,y):
-    if y == 0:
-        print("Dalyba is nulio negalima!")
-    else:
-        return x / y
-
-@app.route("/")
-def hello_world():
-    
-    history_items = "".join([f"<li>{item}</li>" for item in history])
-
-    template = """
-                <!DOCTYPE html>
-                <html lang="lt">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Skaičiuotuvas</title>
-                </head>
-                <body>
-                    <form action="/skaiciuotuvas" method="post">
-                        <label for="expression">Įveskite išraišką:</label>
-                        <input type="text" id="expression" name="expression">
-                        <button type="submit">Skaičiuoti</button>
-                    </form>
-                    
-                    <h2>Veiksmų istorija:</h2>
-                    <ul>
-                        {% for item in history_items %}
-                            <li>{{ item }}</li>
-                        {% endfor %}
-                    </ul>
-                </body>
-                </html>
-            """
-    return render_template_string(template, history=history)
-
-@app.route("/skaiciuotuvas", methods =['POST'])
-def skaiciuoti():
-    expression = request.form['expression']
+def skaiciuoti_rezultata(num1, num2, operatorius):
     try:
-        num1, operacija, num2 = expression.split() #išskaidoma išraiška į tris elementus atskiriant juos pagal tarpus
-        num1 = float(num1)
-        num2 = float(num2)
+        if operatorius == 'sudėti':
+            return num1 + num2
+        elif operatorius == 'atimti':
+            return num1 - num2
+        elif operatorius == 'dauginti':
+            return num1 * num2
+        elif operatorius == 'dalinti':
+            if num2 != 0:
+                return num1 / num2
+            else:
+                raise ZeroDivisionError("Dalyba iš nulio negalima!")
+        elif operatorius == 'kvadratinė_šaknis':
+            if num1 >= 0:
+                return math.sqrt(num1)
+            else:
+                raise ValueError("Negalima skaičiuoti kvadratinės šaknies iš neigiamo skaičiaus!")
+        elif operatorius == 'kvadratu':
+            return num1 ** 2
+        elif operatorius == 'faktorialas':
+            if num1 >= 0:
+                return math.factorial(num1)
+            else:
+                raise ValueError("Faktorialas negali būti skaičiuojamas iš neigiamo skaičiaus!")
+        elif operatorius == 'sinusas':
+            return math.sin(num1)
+        elif operatorius == 'kosinusas':
+            return math.cos(num1)
+        else:
+            raise ValueError("Neteisingas operatorius!")
+    except (ValueError, ZeroDivisionError) as e:
+        return str(e)  # Pakeičiame grąžinimą į string'ą, kad nebūtų grąžinamas None
 
-    
-        if operacija == '+':
-            result = sudetis(num1, num2)
 
-        elif operacija == '-':
-            result = atimtis (num1, num2)
+@app.route('/')
+def skaiciuotuvas():
+    return render_template('skaiciuotuvas.html')
 
-        elif operacija == '*':
-            result = daugyba (num1, num2)
-
-        elif operacija == '/':
-            result = dalyba (num1, num2)
-
-        history.append(f"{num1} {operacija} {num2} = {result}")
-        print(history)
-
-        return f"Rezultatas: {result}" #Jeigu išraiška įvesta teisingai, išspausdinamas gautas rezultatas
-    except Exception as e:
-        error = f"Įvyko klaida įvertinant išraiską: {e}" #Jeigu programa išraiškos nesupranta, išspausdinama žinutė, kad nepavyko gauti rezultato
-        return f"Klaida: {error}"
+@app.route('/skaiciuoti', methods=['POST'])
+def atlikti_skaiciavima():
+    try:
+        num1 = float(request.form['num1'])
+        operatorius = request.form['operatorius']
+        if operatorius not in ['kvadratinė_šaknis', 'kvadratu', 'faktorialas', 'sinusas', 'kosinusas']:
+            num2 = float(request.form['num2'])
+        else:
+            num2 = None
+        
+        if operatorius == 'faktorialas':
+            if num1.is_integer() and num1 >= 0:
+                num1 = int(num1)
+            else:
+                raise ValueError("Faktorialas gali būti skaičiuojamas tik sveikam teigiamam skaičiui!")
+        
+        rezultatas = skaiciuoti_rezultata(num1, num2, operatorius)
+        return render_template('skaiciuotuvas.html', rezultatas=rezultatas, num1=num1, num2=num2, operatorius=operatorius)
+    except ValueError as e:
+        return render_template('skaiciuotuvas.html', rezultatas=str(e), num1=request.form['num1'], num2=request.form['num2'], operatorius=request.form['operatorius'])
 
 if __name__ == '__main__':
-    app.run() #Programos paleidimas
-
-
-
-
-
-
-
-"""
-def sudetis(x,y):
-    return x + y
-
-def atimtis(x,y):
-    return x - y
-
-def daugyba(x,y):
-    return x * y
-
-def dalyba(x,y):
-    if y == 0:
-        print("Dalyba is nulio negalima!")
-        returnut("Iveskite skaicius ir operacija (pvz.: 5+7): ")
-
-    else:
-        return x / y
-
-
-#meniu pasirinkimas:
-while True:
-
-    skaiciai_ir_operacija = inp
-    if len(skaiciai_ir_operacija) != 3 or skaiciai_ir_operacija[1] not in ['+', '-','*', '/']:
-        print ("Neteisingas formatas!")
-        continue
-    
-    num1, operacija, num2 = skaiciai_ir_operacija
-
-    num1 = float(num1)
-    num2 = float(num2)
-
-
-    #pasirinktų operacijų įgyvendinimas: 
-    if operacija == '+':
-        print(num1, "+", num2, "=", sudetis(num1, num2))
-
-    elif operacija == '-':
-        print(num1, "-", num2, "=", atimtis(num1, num2))
-
-    elif operacija == '*':
-        print(num1, "*", num2, "=", daugyba(num1, num2))
-
-    elif operacija == '/':
-        print(num1, "/", num2, "=", dalyba(num1, num2))
-
-
-        kitas_skaiciavimas = input("Ar norite atlikti dar viena operacija? (taip/ne): ")
-        if kitas_skaiciavimas == "ne":
-            break
-"""
+    app.run(debug=True)
